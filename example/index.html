@@ -1,9 +1,9 @@
 <div id="app">
   <div>
-    {{ message }}
-  </div>
-  <div v-if="$ttvSDK">
-    {{ $ttvSDK.page.name }}
+    <div v-if="$ttvLoaded">
+      TTV Loaded<br />
+      {{ $ttvSDK.page.name }}
+    </div>
   </div>
 </div>
 
@@ -15,13 +15,13 @@
     el: '#app',
     data() {
       return {
-        message: '',
+        ttvLoaded: false,
       };
     },
     ttv: {
       onloadTelemetryTV() {
         console.log('onloadTelemetryTV', this.$ttvSDK);
-        this.message = 'TTV Loaded';
+        this.ttvLoaded = true;
       },
       onApiStatusChange(status) {
         console.log('onApiStatusChange', status);

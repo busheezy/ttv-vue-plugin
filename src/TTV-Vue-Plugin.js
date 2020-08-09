@@ -10,8 +10,6 @@ const callbacks = [
 
 const TTVVuePlugin = {
   install(Vue) {
-    Vue.prototype.$ttvSDK = null;
-
     Vue.mixin({
       mounted() {
         window.onloadTelemetryTV = (ttvSDK) => {
