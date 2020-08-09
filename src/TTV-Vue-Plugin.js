@@ -14,12 +14,12 @@ const TTVVuePlugin = {
 
     Vue.mixin({
       mounted() {
-        if (!this.$options.ttv) {
-          return;
-        }
-
         window.onloadTelemetryTV = (ttvSDK) => {
           Vue.prototype.$ttvSDK = Vue.observable(ttvSDK);
+
+          if (!this.$options.ttv) {
+            return;
+          }
 
           if (this.$options.ttv.onloadTelemetryTV) {
             this.$options.ttv.onloadTelemetryTV.bind(this)();
