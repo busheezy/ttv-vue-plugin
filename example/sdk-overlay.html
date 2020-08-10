@@ -1,0 +1,265 @@
+<div id="app">
+  <main v-if="ttvLoaded">
+    <header class="header">
+      <h1>Vue Overlay SDK Test</h1>
+      <h3>
+        Playlist Name:
+        <b>{{ (($ttvSDK.playlist && $ttvSDK.playlist.name) ? $ttvSDK.playlist.name : 'No Playlist') }}</b> |
+        Current Page:
+        <b>{{ (($ttvSDK.page && $ttvSDK.page.name) ? $ttvSDK.page.name : 'No Page') }}</b>
+      </h3>
+      <div class="buttons-wrapper">
+        Playlist Playback:&nbsp;
+        <button @click="pause">Pause</button>
+        <button @click="play">Play</button>
+        <button @click="restart">Restart</button>
+      </div>
+    </header>
+  
+    <section class="right-sidebar">
+      <nav>
+        <h3>Pages:</h3>
+        <ol class="overlayPagesList">
+          <li
+            v-for="(page, i) in $ttvSDK.playlist.pages"
+            :key="i"
+            @click="goToPageByID(page.description, page.id)"
+          >{{ page.description }}</li>
+        </ol>
+      </nav>
+      <div class="to-page-by-name">
+        <label>Go to page by Page Name (Description)</label>
+        <input type="text" v-model="inputPageName" v-on:keyup.enter="goToPageByName" />
+        <button @click="goToPageByName">Go</button>
+      </div>
+      <div class="buttons-wrapper">
+        <button @click="previousPage">&laquo; Prev Page</button>
+        <button @click="nextPage">Next Page &raquo;</button>
+      </div>
+    </section>
+  
+    <footer class="footer">
+      <p>
+        <label for="overlayProxyGetInput">Get resource by proxy</label>
+        <input type="url" v-model="inputProxyGetURL" v-on:keyup.enter="proxyGet" />
+        <button @click="proxyGet">Proxy Get</button>
+      </p>
+    </footer>
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js"></script>
+<script src="https://zealous-sinoussi-551506.netlify.app/TTV-Vue-Plugin.dist.js"></script>
+
+<script>
+  const app = new Vue({
+    el: "#app",
+    data() {
+      return {
+        ttvLoaded: false,
+        inputPageName: '',
+        inputProxyGetURL: '',
+      };
+    },
+    methods: {
+      pause() {
+        console.log('Clicked on pause button');
+
+        if (this.$ttvSDK.playlist && this.$ttvSDK.playlist.pause) {
+          this.$ttvSDK.playlist.pause();
+        }
+      },
+      play() {
+        console.log('Clicked on play button');
+
+        if (this.$ttvSDK.playlist && this.$ttvSDK.playlist.play) {
+          this.$ttvSDK.playlist.play();
+        }
+      },
+      restart() {
+        console.log('Clicked on restart button');
+
+        if (this.$ttvSDK.player && this.$ttvSDK.player.restart) {
+          this.$ttvSDK.player.restart();
+        }
+      },
+      nextPage() {
+        console.log('Clicked on Next Page button');
+
+        if (this.$ttvSDK.playlist && this.$ttvSDK.playlist.nextPage) {
+          this.$ttvSDK.playlist.nextPage();
+        }
+      },
+      previousPage() {
+        console.log('Clicked on Next Page button');
+
+        if (this.$ttvSDK.playlist && this.$ttvSDK.playlist.previousPage) {
+          this.$ttvSDK.playlist.previousPage();
+        }
+      },
+      goToPageByID(pageName, pageID) {
+        console.log(`Clicked on ${pageName} page (${pageID})`);
+
+        this.$ttvSDK.playlist.goToPageId(pageID);
+      },
+      goToPageByName() {
+        console.log('Trying to go to page name', this.inputPageName);
+
+        this.$ttvSDK.playlist.goToPageName(this.inputPageName);
+        this.inputPageName = '';
+      },
+      proxyGet() {
+        console.log('Clicked on Proxy Get button');
+        console.log('Trying to get resource by URL', this.inputPageName);
+
+        this.$ttvSDK.get(this.inputProxyGetURL)
+          .then(res => {
+            console.log(`get resource from "${this.inputProxyGetURL}" -----\n\n`, res);
+            this.inputProxyGetURL = '';
+          })
+          .catch(err => {
+            console.warn(`Error getting resource from "${this.inputProxyGetURL}"`, err);
+            this.inputProxyGetURL = '';
+          });
+      }
+    },
+    ttv: {
+      onloadTelemetryTV() {
+        this.ttvLoaded = true;
+
+        console.warn('onloadTelemetryTV:', this.$ttvSDK)
+        console.log('SDK Loaded. Using Playlist:', this.$ttvSDK.playlist.name)
+      },
+      onApiStatusChange(status) {
+        console.warn(`====== The API Status Changed! (${this.$ttvSDK.player.apiStatus})`);
+      },
+      onPageChange(newPage) {
+        console.log(`onPageChange - to ${newPage.name} (${newPage.id})`)
+      },
+      onPlaylistChange(newPlaylist) {
+        console.log(`onPlaylistChange - to ${newPlaylist.name} (${newPlaylist.id})`)
+      },
+    },
+  });
+</script>
+
+<style>
+  html,
+  body {
+    margin: 0;
+  }
+  body {
+    color: #222;
+    font-family: sans-serif;
+    font-size: 12px;
+    position: relative;
+  }
+
+  main {
+    position: fixed;
+    z-index: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: grid;
+    grid-template-areas:
+      "header right"
+      "main right"
+      "footer right";
+    grid-template-columns: 4fr 1fr;
+    grid-template-rows: 15% auto 10%;
+  }
+
+  h1 {
+    font-size: 18px;
+    margin: 0;
+    padding: 0;
+    line-height: 180%;
+  }
+
+  h3 {
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+    font-weight: normal;
+    line-height: 150%;
+  }
+
+  .header,
+  .right-sidebar,
+  .footer {
+    padding: 2vmin;
+  }
+
+  .header,
+  .footer {
+    background: rgba(255, 255, 255, 0.35);
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .header {
+    grid-area: header;
+  }
+
+  .right-sidebar {
+    grid-area: right;
+    color: #fff;
+    text-shadow: 0 0.15em 0.05em rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.35);
+    padding-bottom: 4vmin;
+
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    overflow: hidden;
+  }
+
+  .footer {
+    grid-area: footer;
+    padding-bottom: 4vmin;
+  }
+
+  .header .buttons-wrapper {
+    padding: 0.5em 0 0 0;
+  }
+
+  .right-sidebar nav {
+    flex: 1 1 0.0001px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .overlayPagesList {
+    margin: 0;
+    padding: 0 0 0 1.2em;
+  }
+
+  .overlayPagesList li {
+    padding: 0.3em 0;
+    cursor: pointer;
+  }
+
+  .to-page-by-name,
+  .right-sidebar .buttons-wrapper {
+    margin-top: 1vmin;
+    padding-top: 1vmin;
+    border-top: 1px solid rgba(0, 0, 0, 0.5);
+  }
+
+  .to-page-by-name label {
+    display: block;
+    padding-bottom: 0.3em;
+  }
+
+  .right-sidebar .buttons-wrapper {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+  }
+</style>
