@@ -122,7 +122,7 @@ const app = new Vue({
           this.inputProxyGetURL = '';
         })
         .catch((err) => {
-          console.warn(
+          console.error(
             `Error getting resource from "${this.inputProxyGetURL}"`,
             err,
           );
@@ -134,11 +134,11 @@ const app = new Vue({
     onloadTelemetryTV() {
       this.ttvLoaded = true;
 
-      console.warn('onloadTelemetryTV:', this.$ttvSDK);
+      console.log('onloadTelemetryTV:', this.$ttvSDK);
       console.log('SDK Loaded. Using Playlist:', this.$ttvSDK.playlist.name);
     },
     onApiStatusChange(status) {
-      console.warn(
+      console.log(
         `====== The API Status Changed! (${this.$ttvSDK.player.apiStatus})`,
       );
     },
