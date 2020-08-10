@@ -52,95 +52,106 @@
 <script src="https://zealous-sinoussi-551506.netlify.app/TTV-Vue-Plugin.dist.js"></script>
 
 <script>
-  const app = new Vue({
-    el: "#app",
-    data() {
-      return {
-        ttvLoaded: false,
-        inputPageName: '',
-        inputProxyGetURL: '',
-      };
-    },
-    methods: {
-      pause() {
-        console.log('Clicked on pause button');
+const app = new Vue({
+  el: '#app',
+  data() {
+    return {
+      ttvLoaded: false,
+      inputPageName: '',
+      inputProxyGetURL: '',
+    };
+  },
+  methods: {
+    pause() {
+      console.log('Clicked on pause button');
 
-        if (this.$ttvSDK.playlist && this.$ttvSDK.playlist.pause) {
-          this.$ttvSDK.playlist.pause();
-        }
-      },
-      play() {
-        console.log('Clicked on play button');
-
-        if (this.$ttvSDK.playlist && this.$ttvSDK.playlist.play) {
-          this.$ttvSDK.playlist.play();
-        }
-      },
-      restart() {
-        console.log('Clicked on restart button');
-
-        if (this.$ttvSDK.player && this.$ttvSDK.player.restart) {
-          this.$ttvSDK.player.restart();
-        }
-      },
-      nextPage() {
-        console.log('Clicked on Next Page button');
-
-        if (this.$ttvSDK.playlist && this.$ttvSDK.playlist.nextPage) {
-          this.$ttvSDK.playlist.nextPage();
-        }
-      },
-      previousPage() {
-        console.log('Clicked on Next Page button');
-
-        if (this.$ttvSDK.playlist && this.$ttvSDK.playlist.previousPage) {
-          this.$ttvSDK.playlist.previousPage();
-        }
-      },
-      goToPageByID(pageName, pageID) {
-        console.log(`Clicked on ${pageName} page (${pageID})`);
-
-        this.$ttvSDK.playlist.goToPageId(pageID);
-      },
-      goToPageByName() {
-        console.log('Trying to go to page name', this.inputPageName);
-
-        this.$ttvSDK.playlist.goToPageName(this.inputPageName);
-        this.inputPageName = '';
-      },
-      proxyGet() {
-        console.log('Clicked on Proxy Get button');
-        console.log('Trying to get resource by URL', this.inputPageName);
-
-        this.$ttvSDK.get(this.inputProxyGetURL)
-          .then(res => {
-            console.log(`get resource from "${this.inputProxyGetURL}" -----\n\n`, res);
-            this.inputProxyGetURL = '';
-          })
-          .catch(err => {
-            console.warn(`Error getting resource from "${this.inputProxyGetURL}"`, err);
-            this.inputProxyGetURL = '';
-          });
+      if (this.$ttvSDK.playlist && this.$ttvSDK.playlist.pause) {
+        this.$ttvSDK.playlist.pause();
       }
     },
-    ttv: {
-      onloadTelemetryTV() {
-        this.ttvLoaded = true;
+    play() {
+      console.log('Clicked on play button');
 
-        console.warn('onloadTelemetryTV:', this.$ttvSDK)
-        console.log('SDK Loaded. Using Playlist:', this.$ttvSDK.playlist.name)
-      },
-      onApiStatusChange(status) {
-        console.warn(`====== The API Status Changed! (${this.$ttvSDK.player.apiStatus})`);
-      },
-      onPageChange(newPage) {
-        console.log(`onPageChange - to ${newPage.name} (${newPage.id})`)
-      },
-      onPlaylistChange(newPlaylist) {
-        console.log(`onPlaylistChange - to ${newPlaylist.name} (${newPlaylist.id})`)
-      },
+      if (this.$ttvSDK.playlist && this.$ttvSDK.playlist.play) {
+        this.$ttvSDK.playlist.play();
+      }
     },
-  });
+    restart() {
+      console.log('Clicked on restart button');
+
+      if (this.$ttvSDK.player && this.$ttvSDK.player.restart) {
+        this.$ttvSDK.player.restart();
+      }
+    },
+    nextPage() {
+      console.log('Clicked on Next Page button');
+
+      if (this.$ttvSDK.playlist && this.$ttvSDK.playlist.nextPage) {
+        this.$ttvSDK.playlist.nextPage();
+      }
+    },
+    previousPage() {
+      console.log('Clicked on Next Page button');
+
+      if (this.$ttvSDK.playlist && this.$ttvSDK.playlist.previousPage) {
+        this.$ttvSDK.playlist.previousPage();
+      }
+    },
+    goToPageByID(pageName, pageID) {
+      console.log(`Clicked on ${pageName} page (${pageID})`);
+
+      this.$ttvSDK.playlist.goToPageId(pageID);
+    },
+    goToPageByName() {
+      console.log('Trying to go to page name', this.inputPageName);
+
+      this.$ttvSDK.playlist.goToPageName(this.inputPageName);
+      this.inputPageName = '';
+    },
+    proxyGet() {
+      console.log('Clicked on Proxy Get button');
+      console.log('Trying to get resource by URL', this.inputPageName);
+
+      this.$ttvSDK
+        .get(this.inputProxyGetURL)
+        .then((res) => {
+          console.log(
+            `get resource from "${this.inputProxyGetURL}" -----\n\n`,
+            res,
+          );
+          this.inputProxyGetURL = '';
+        })
+        .catch((err) => {
+          console.warn(
+            `Error getting resource from "${this.inputProxyGetURL}"`,
+            err,
+          );
+          this.inputProxyGetURL = '';
+        });
+    },
+  },
+  ttv: {
+    onloadTelemetryTV() {
+      this.ttvLoaded = true;
+
+      console.warn('onloadTelemetryTV:', this.$ttvSDK);
+      console.log('SDK Loaded. Using Playlist:', this.$ttvSDK.playlist.name);
+    },
+    onApiStatusChange(status) {
+      console.warn(
+        `====== The API Status Changed! (${this.$ttvSDK.player.apiStatus})`,
+      );
+    },
+    onPageChange(newPage) {
+      console.log(`onPageChange - to ${newPage.name} (${newPage.id})`);
+    },
+    onPlaylistChange(newPlaylist) {
+      console.log(
+        `onPlaylistChange - to ${newPlaylist.name} (${newPlaylist.id})`,
+      );
+    },
+  },
+});
 </script>
 
 <style>

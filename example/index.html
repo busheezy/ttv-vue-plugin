@@ -11,39 +11,39 @@
 <script src="https://zealous-sinoussi-551506.netlify.app/TTV-Vue-Plugin.dist.js"></script>
 
 <script>
-  const app = new Vue({
-    el: '#app',
-    data() {
-      return {
-        ttvLoaded: false,
-      };
+const app = new Vue({
+  el: '#app',
+  data() {
+    return {
+      ttvLoaded: false,
+    };
+  },
+  ttv: {
+    onloadTelemetryTV() {
+      console.log('onloadTelemetryTV', this.$ttvSDK);
+      this.ttvLoaded = true;
     },
-    ttv: {
-      onloadTelemetryTV() {
-        console.log('onloadTelemetryTV', this.$ttvSDK);
-        this.ttvLoaded = true;
-      },
-      onApiStatusChange(status) {
-        console.log('onApiStatusChange', status);
-      },
-      onPageChange(page) {
-        console.log('onPageChange', page);
-      },
-      onPlaylistChange(playlist) {
-        console.log('onPlaylistChange', playlist);
-      },
-      onGeoChange(coordinates) {
-        console.log('onGeoChange', coordinates);
-      },
-      onOverrideStart(override) {
-        console.log('onOverrideStart', override);
-      },
-      onOverrideEnd(override) {
-        console.log('onOverrideEnd', override);
-      },
-      onSerialMessage(message) {
-        console.log('onSerialMessage', message);
-      },
-    }
-  });
+    onApiStatusChange(status) {
+      console.log('onApiStatusChange', status);
+    },
+    onPageChange(page) {
+      console.log('onPageChange', page);
+    },
+    onPlaylistChange(playlist) {
+      console.log('onPlaylistChange', playlist);
+    },
+    onGeoChange(coordinates) {
+      console.log('onGeoChange', coordinates);
+    },
+    onOverrideStart(override) {
+      console.log('onOverrideStart', override);
+    },
+    onOverrideEnd(override) {
+      console.log('onOverrideEnd', override);
+    },
+    onSerialMessage(message) {
+      console.log('onSerialMessage', message);
+    },
+  },
+});
 </script>
