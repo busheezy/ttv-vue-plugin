@@ -137,9 +137,9 @@ const app = new Vue({
       console.log('onloadTelemetryTV:', this.$ttvSDK);
       console.log('SDK Loaded. Using Playlist:', this.$ttvSDK.playlist.name);
     },
-    onApiStatusChange(status) {
+    onApiStatusChange(newStatus) {
       console.log(
-        `====== The API Status Changed! (${this.$ttvSDK.player.apiStatus})`,
+        `====== The API Status Changed! (${newStatus})`,
       );
     },
     onPageChange(newPage) {
@@ -149,6 +149,9 @@ const app = new Vue({
       console.log(
         `onPlaylistChange - to ${newPlaylist.name} (${newPlaylist.id})`,
       );
+    },
+    onGeoChange(newGeo) {
+      console.log(`onGeoChange - to ${JSON.stringify(newGeo || {})})`)
     },
   },
 });
